@@ -1,7 +1,7 @@
 package synapticloop.templar.gen;
 
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
 
 public class Main {
 	private static void usage(String message) {
@@ -19,7 +19,7 @@ public class Main {
 		usage(null);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		if(args.length != 2) {
 			usage();
 		} else {
@@ -28,11 +28,12 @@ public class Main {
 			checkDirectory(inputDir, false);
 			String outputDir = args[1];
 			checkDirectory(outputDir, true);
-			
-			Generator generator = new Generator();
+
+			Generator generator = new Generator(inputDir, outputDir);
+			generator.generate();
 		}
 	}
-	
+
 	private static void checkDirectory(String directory, boolean create) {
 		String temp = "";
 		if(directory.startsWith("/")) {
@@ -41,15 +42,7 @@ public class Main {
 		} else {
 			// else from current directory... (probably not correct)
 
-			URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
-			String rootDir = location.getFile();
-
-			if(rootDir.endsWith(".jar")) {
-				// we are running this from the jar file
-				rootDir = rootDir.substring(0, rootDir.lastIndexOf("/") + 1);
-			}
-			
-			temp = rootDir + directory;
+			temp = System.getProperty("user.dir") + "/" +  directory;
 		}
 
 		// now check to see whether the directory exists
@@ -58,6 +51,9 @@ public class Main {
 			usage("Directory '" + temp + " exists and is not a directory.  Please remove the file.");
 		}
 
+		if(!file.exists() && !create) {
+			usage("Could not find directory '" + temp + "'.");
+		}
 		if(!file.exists() && create) {
 			file.mkdirs();
 		}
