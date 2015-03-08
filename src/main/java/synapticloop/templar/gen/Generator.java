@@ -20,30 +20,44 @@ import synapticloop.templar.utils.TemplarContext;
 
 public class Generator {
 
+	private static final String TEMPLAR_CONTEXT_FILE_EXTENSION = ".context";
 	private String inputDir;
 	private String outputDir;
 
 	public Generator(String inputDir, String outputDir) {
 		this.inputDir = inputDir;
 		this.outputDir = outputDir;
+		if(inputDir.endsWith("/") && !outputDir.endsWith("/")) {
+			this.outputDir += "/";
+		}
+
+		if(outputDir.endsWith("/") && !inputDir.endsWith("/")) {
+			this.inputDir += "/";
+		}
 	}
 
 	public void generate() throws IOException {
 		// walk the input dir and get all of the files
+		SimpleLogger.logInfo("Generating");
+		SimpleLogger.logInfo("  from: " + inputDir);
+		SimpleLogger.logInfo("    to: " + outputDir);
+
+
 		Path start = FileSystems.getDefault().getPath(inputDir);
 
 		Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				String templarContextFile = file.toString();
-				if (templarContextFile.endsWith(".templar")) {
-					// look for another file without the templar
-					String inputTemplarFile = templarContextFile.substring(0, templarContextFile.indexOf(".templar"));
-					File inputFile = new File(inputTemplarFile);
-					if(inputFile.exists()) {
+				String inputTemplarContextFile = file.toString();
+
+				if (inputTemplarContextFile.endsWith(TEMPLAR_CONTEXT_FILE_EXTENSION)) {
+					// look for another file without the .context
+					File inputTemplarNonContextFile = new File(inputTemplarContextFile.substring(0, inputTemplarContextFile.indexOf(TEMPLAR_CONTEXT_FILE_EXTENSION)));
+
+					if(inputTemplarNonContextFile.exists()) {
 						// do the processing
 						TemplarContext templarContext = new TemplarContext();
 						Properties properties = new Properties();
-						properties.load(new FileReader(new File(templarContextFile)));
+						properties.load(new FileReader(new File(inputTemplarContextFile)));
 
 						Enumeration<Object> keys = properties.keys();
 						while (keys.hasMoreElements()) {
@@ -52,21 +66,25 @@ public class Generator {
 						}
 
 						FileWriter fileWriter = null;
-						File newOutputDir = null;
 						try {
-							Parser parser = new Parser(inputFile);
+							Parser parser = new Parser(inputTemplarNonContextFile);
 
-							newOutputDir = new File(outputDir + "/" + inputTemplarFile.substring(0, inputTemplarFile.lastIndexOf("/")).substring(inputDir.length()));
-							newOutputDir.mkdirs();
-							String outputGeneratedFile = (newOutputDir + "/" + inputTemplarFile.substring(inputDir.length())).replaceAll("//", "/");
-							fileWriter = new FileWriter(outputGeneratedFile);
+							// now we need to figure out the output directory and the output file name
+							String outputFile = inputTemplarNonContextFile.getAbsolutePath().replaceFirst(inputDir, outputDir);
+
+							// the output directory creation
+							File outputDirectory = new File(outputFile.substring(0, outputFile.lastIndexOf("/")));
+							if(!outputDirectory.exists()) {
+								SimpleLogger.logInfo("Creating directory '" + outputDir + "'.");
+								outputDirectory.mkdirs();
+							}
+
+							fileWriter = new FileWriter(outputFile);
 							fileWriter.write(parser.render(templarContext));
-							SimpleLogger.logInfo("Processing input file '" + inputTemplarFile + "', with context '" + templarContextFile + "', to " + outputGeneratedFile);
+							SimpleLogger.logInfo("Processing input file '" + inputTemplarNonContextFile + "', with context '" + inputTemplarContextFile + "', to " + outputFile); 
 						} catch (ParseException ex) {
-							// TODO Auto-generated catch block
 							ex.printStackTrace();
 						} catch (RenderException ex) {
-							// TODO Auto-generated catch block
 							ex.printStackTrace();
 						} finally {
 							if(null != fileWriter) {
@@ -74,7 +92,7 @@ public class Generator {
 							}
 						}
 					} else {
-						SimpleLogger.logWarn("Found templar file '" + templarContextFile + "', however no input file, expecting '" + inputTemplarFile + "'.");
+						SimpleLogger.logWarn("Found templar file '" + inputTemplarContextFile + "', however no input file, expecting '" + inputTemplarNonContextFile + "'.");
 					}
 				}
 				return FileVisitResult.CONTINUE;
