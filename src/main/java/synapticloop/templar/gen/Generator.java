@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -19,10 +20,12 @@ import synapticloop.templar.exception.RenderException;
 import synapticloop.templar.utils.TemplarContext;
 
 public class Generator {
-
 	private static final String TEMPLAR_CONTEXT_FILE_EXTENSION = ".context";
 	private String inputDir;
 	private String outputDir;
+
+	private ArrayList<String> nonGeneratedFiles = new ArrayList<String>();
+	private int numFilesGenerated = 0;
 
 	public Generator(String inputDir, String outputDir) {
 		this.inputDir = inputDir;
@@ -42,7 +45,6 @@ public class Generator {
 		SimpleLogger.logInfo("  from: " + inputDir);
 		SimpleLogger.logInfo("    to: " + outputDir);
 
-
 		Path start = FileSystems.getDefault().getPath(inputDir);
 
 		Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
@@ -51,9 +53,10 @@ public class Generator {
 
 				if (inputTemplarContextFile.endsWith(TEMPLAR_CONTEXT_FILE_EXTENSION)) {
 					// look for another file without the .context
-					File inputTemplarNonContextFile = new File(inputTemplarContextFile.substring(0, inputTemplarContextFile.indexOf(TEMPLAR_CONTEXT_FILE_EXTENSION)));
+					String inputTemplarFileName = inputTemplarContextFile.substring(0, inputTemplarContextFile.indexOf(TEMPLAR_CONTEXT_FILE_EXTENSION));
+					File inputTemplarFile = new File(inputTemplarFileName);
 
-					if(inputTemplarNonContextFile.exists()) {
+					if(inputTemplarFile.exists()) {
 						// do the processing
 						TemplarContext templarContext = new TemplarContext();
 						Properties properties = new Properties();
@@ -67,10 +70,10 @@ public class Generator {
 
 						FileWriter fileWriter = null;
 						try {
-							Parser parser = new Parser(inputTemplarNonContextFile);
+							Parser parser = new Parser(inputTemplarFile);
 
 							// now we need to figure out the output directory and the output file name
-							String outputFile = inputTemplarNonContextFile.getAbsolutePath().replaceFirst(inputDir, outputDir);
+							String outputFile = inputTemplarFile.getAbsolutePath().replaceFirst(inputDir, outputDir);
 
 							// the output directory creation
 							File outputDirectory = new File(outputFile.substring(0, outputFile.lastIndexOf("/")));
@@ -81,21 +84,37 @@ public class Generator {
 
 							fileWriter = new FileWriter(outputFile);
 							fileWriter.write(parser.render(templarContext));
-							SimpleLogger.logInfo("Processing input file '" + inputTemplarNonContextFile + "', with context '" + inputTemplarContextFile + "', to " + outputFile); 
-						} catch (ParseException ex) {
-							ex.printStackTrace();
-						} catch (RenderException ex) {
-							ex.printStackTrace();
+							SimpleLogger.logInfo("Processing input file '" + inputTemplarFile + "', with context '" + inputTemplarContextFile + "', to " + outputFile);
+							numFilesGenerated++;
+						} catch (ParseException pex) {
+							SimpleLogger.logFatal("Could not parse file '" + inputTemplarFileName + "'.", pex);
+							nonGeneratedFiles.add(inputTemplarFileName);
+						} catch (RenderException rex) {
+							SimpleLogger.logFatal("Could not parse file '" + inputTemplarFileName + "'.", rex);
+							nonGeneratedFiles.add(inputTemplarFileName);
 						} finally {
 							if(null != fileWriter) {
 								fileWriter.close();
 							}
 						}
 					} else {
-						SimpleLogger.logWarn("Found templar file '" + inputTemplarContextFile + "', however no input file, expecting '" + inputTemplarNonContextFile + "'.");
+						SimpleLogger.logWarn("Found templar file '" + inputTemplarContextFile + "', however no input file, expecting '" + inputTemplarFile + "'.");
 					}
 				}
 				return FileVisitResult.CONTINUE;
 			}
 		});
-	}}
+
+		SimpleLogger.logInfo(":---------------------------------------------------:");
+		SimpleLogger.logInfo("Generated " + numFilesGenerated + " files.");
+
+		for (String nonGeneratedFile : nonGeneratedFiles) {
+			SimpleLogger.logFatal("Failed to generate the following file '" + nonGeneratedFile + "'.");
+		}
+
+		int numNonGeneratedFiles = nonGeneratedFiles.size();
+		if(numNonGeneratedFiles > 0) {
+			SimpleLogger.logFatal(numNonGeneratedFiles + " files failed to generate, please see the output for more details.");
+		}
+	}
+}

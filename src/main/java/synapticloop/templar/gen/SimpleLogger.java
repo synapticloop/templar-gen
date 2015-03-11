@@ -2,10 +2,10 @@ package synapticloop.templar.gen;
 
 
 public class SimpleLogger {
-	private static final String INFO = "[INFO]:  ";
-	private static final String ERROR = "[ERROR]: ";
-	private static final String FATAL = "[FATAL]: ";
-	private static final String WARN = "[WARN]:  ";
+	private static final String INFO = "[  INFO ]:  ";
+	private static final String ERROR = "[ ERROR ]: ";
+	private static final String FATAL = "[ FATAL ]: ";
+	private static final String WARN = "[  WARN ]:  ";
 
 	private static void log(String type, String... messages) {
 		System.out.print(type);
