@@ -15,8 +15,8 @@
 		<h3>usage</h3>
 
 		<p>
-			Get the latest code from <a href="https://github.com/synapticloop/templar-gen/tree/master/dist">the templar-gen</a> 
-			distribution directory.
+			Get the latest code from <a href="https://github.com/synapticloop/templar-gen/releases">the templar-gen</a> 
+			releases directory.
 		<p>
 
 		<p>run it with the following</p>
@@ -34,10 +34,34 @@ java -jar templar-gen.jar &lt;input_directory&gt; &lt;output_directory&gt;
 		<p>
 			This page was generated with the following command line
 		</p>
+
 <pre><code>
 java -jar templar-gen.jar src .
 </code></pre>
 
+		<p>
+			You can of course use it within a ant build file:
+		</p>
+
+<pre><code>
+{pre &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="templar-gen" default="gen"&gt;
+	&lt;target name="gen" description="templar-gen the pages"&gt;
+		&lt;java jar="templar-gen.jar" fork="true" failonerror="true" maxmemory="128m"&gt;
+			&lt;arg value="src" /&gt;
+			&lt;arg value="." /&gt;
+		&lt;/java&gt;
+	&lt;/target&gt;
+&lt;/project&gt;
+pre}
+</code></pre>
+
+		<h3>Need Help?</h3>
+
+		<p>
+			There is copious documentation for the templar templating engine over at 
+			<a href="http://synapticloop.github.io/templar/">http://synapticloop.github.io/templar/</a>
+		</p>
 		{import src/imports/footer.templar}
 	</section>
 </div>

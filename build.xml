@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="templar-gen" default="gen">
+	<target name="gen" description="templar-gen the pages">
+		<java jar="templar-gen.jar" fork="true" failonerror="true" maxmemory="128m">
+			<arg value="src" />
+			<arg value="." />
+		</java>
+	</target>
+</project>
