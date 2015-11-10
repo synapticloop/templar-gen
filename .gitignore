@@ -3,3 +3,5 @@ docs/
 out/
 build/
 dist/
+bin/
+.gradle/

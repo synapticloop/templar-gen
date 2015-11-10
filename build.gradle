@@ -1,0 +1,100 @@
+plugins {
+	id 'java'
+	id 'eclipse'
+	id 'maven'
+	id 'maven-publish'
+
+	id 'net.saliman.cobertura' version '2.2.6'
+	id "org.sonarqube" version "1.0"
+	id "com.jfrog.bintray" version "1.4"
+	id 'com.github.johnrengelman.shadow' version '1.2.2'
+}
+
+group = 'synapticloop'
+archivesBaseName = 'templar-gen'
+description = """generate output with the Templar templating engine"""
+version = 'v1.0.0'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+
+cobertura {
+	coverageFormats = [ 'html', 'xml']
+}
+
+test {
+	include '**/*Test.class' 
+	maxParallelForks = 1
+	forkEvery = 50 
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	runtime 'synapticloop:templar:v1.1.0'
+	compile 'synapticloop:templar:v1.1.0'
+}
+
+
+
+jar {
+	manifest {
+		attributes("Main-Class": "synapticloop.templar.gen.Main")
+	}
+}
+
+shadowJar {
+	classifier = ''
+}
+
+jar.finalizedBy(project.tasks.shadowJar)
+
+def javaApiUrl = 'http://docs.oracle.com/javase/1.6.0/docs/api/'
+def groovyApiUrl = 'http://groovy.codehaus.org/gapi/'
+
+tasks.withType(Javadoc) {
+	options.links(javaApiUrl, groovyApiUrl)
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
+test.finalizedBy(project.tasks.cobertura)
+
+publishing {
+	publications {
+		Synapticloop(MavenPublication) {
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+			groupId 'synapticloop'
+			artifactId 'templar-gen'
+		}
+	}
+}
+
+bintray {
+	user = System.getenv('BINTRAY_USER')
+	key = System.getenv('BINTRAY_PASSWORD')
+
+	publications = [ 'Synapticloop' ]
+
+	publish = true
+
+	pkg {
+		repo = 'maven'
+		name = "templar-gen"
+	}
+}

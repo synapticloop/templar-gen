@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/runtime/templar.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry sourcepath="/Users/osmanj/.m2/repository/synapticloop/templar/v1.1.0/templar-v1.1.0-sources.jar" kind="lib" path="/Users/osmanj/.m2/repository/synapticloop/templar/v1.1.0/templar-v1.1.0.jar"/>
 </classpath>
