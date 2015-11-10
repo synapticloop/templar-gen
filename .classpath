@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="build-eclipse"/>
+	<classpathentry kind="lib" path="/Users/osmanj/.m2/repository/synapticloop/templar/v1.1.0/templar-v1.1.0.jar" sourcepath="/Users/osmanj/.m2/repository/synapticloop/templar/v1.1.0/templar-v1.1.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
-	<classpathentry sourcepath="/Users/osmanj/.m2/repository/synapticloop/templar/v1.1.0/templar-v1.1.0-sources.jar" kind="lib" path="/Users/osmanj/.m2/repository/synapticloop/templar/v1.1.0/templar-v1.1.0.jar"/>
 </classpath>
