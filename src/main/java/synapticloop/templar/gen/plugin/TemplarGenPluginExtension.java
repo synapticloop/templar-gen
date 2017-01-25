@@ -17,11 +17,11 @@ package synapticloop.templar.gen.plugin;
  */
 
 public class TemplarGenPluginExtension {
-	private String in = "src";
+	private String inDir = "src";
 	private String out = ".";
 
-	public void setIn(String in) { this.in = in; }
-	public String getIn() { return this.in; }
+	public void setInDir(String inDir) { this.inDir = inDir; }
+	public String getInDir() { return this.inDir; }
 	public void setOut(String out) { this.out = out; }
 	public String getOut() { return this.out; }
 

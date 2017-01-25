@@ -45,7 +45,7 @@ public class TemplarGenTask extends DefaultTask {
 			extension = new TemplarGenPluginExtension();
 		}
 
-		Generator generator = new Generator(extension.getIn(), extension.getOut());
+		Generator generator = new Generator(extension.getInDir(), extension.getOut());
 		generator.generate();
 	}
 }
