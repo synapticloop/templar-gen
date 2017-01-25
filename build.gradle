@@ -5,20 +5,21 @@ plugins {
 	id 'maven-publish'
 
 	id 'net.saliman.cobertura' version '2.2.6'
-	id 'co.riiid.gradle' version '0.3.1'
-	id 'com.jfrog.bintray' version '1.4'
+
+	id 'com.gradle.plugin-publish' version '0.9.7'
+	id 'co.riiid.gradle' version '0.4.2'
+	id 'com.jfrog.bintray' version '1.6'
+	id "com.github.ben-manes.versions" version "0.13.0"
 
 	id 'synapticloop.documentr' version '1.2.3'
 	id 'synapticloop.copyrightr' version '1.0.1'
 	id "synapticloop.projectFilestatistics" version "1.0.1"
-
-	id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 group = 'synapticloop'
 archivesBaseName = 'templar-gen'
 description = """generate output with the Templar templating engine"""
-version = '1.2.0'
+version = '1.2.1'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -44,21 +45,27 @@ dependencies {
 	runtime 'synapticloop:templar:1.3.0'
 
 	compile 'synapticloop:templar:1.3.0'
+	compile gradleApi()
 }
 
+def locateJar(lib) {
+	configurations.runtime.findAll {it.getName().contains(lib)}.collect { it.isDirectory() ? it : zipTree(it) }
+}
 
+task fatJar(type: Jar) {
+	classifier = 'all'
 
-jar {
+	from { locateJar('templar') } { include "**" }
+	from(sourceSets.main.output) { include "**" }
+
 	manifest {
 		attributes("Main-Class": "synapticloop.templar.gen.Main")
 	}
-}
 
-shadowJar {
 	classifier = ''
 }
 
-jar.finalizedBy(project.tasks.shadowJar)
+jar.finalizedBy(project.tasks.fatJar)
 
 def javaApiUrl = 'http://docs.oracle.com/javase/1.6.0/docs/api/'
 def groovyApiUrl = 'http://groovy.codehaus.org/gapi/'
@@ -79,14 +86,25 @@ task sourcesJar(type: Jar) {
 
 test.finalizedBy(project.tasks.cobertura)
 
+
 publishing {
 	publications {
 		Synapticloop(MavenPublication) {
 			from components.java
 			artifact sourcesJar
 			artifact javadocJar
-			groupId 'synapticloop'
-			artifactId 'templar-gen'
+
+			groupId group
+			artifactId archivesBaseName
+
+			pom.withXml {
+				configurations.compile.resolvedConfiguration.firstLevelModuleDependencies.each { dep ->
+					asNode().dependencies[0].dependency.find {
+						it.artifactId[0].text() == dep.moduleName &&
+								it.groupId[0].text() == dep.moduleGroup
+					}.scope[0].value = 'compile'
+				}
+			}
 		}
 	}
 }
@@ -123,4 +141,18 @@ github {
 	assets = [
 		'build/libs/' + archivesBaseName + '-' + version + '.jar'
 	]
+}
+
+pluginBundle {
+	website = 'https://github.com/synapticloop/templar-gen'
+	vcsUrl = 'https://github.com/synapticloop/templar-gen'
+	description = 'static site generator - this utilises the templar templating language'
+	tags = [ 'documentation', 'generator' ]
+
+	plugins {
+		documentrPlugin {
+			id = 'synapticloop.templar-gen'
+			displayName = 'Synapticloop Gradle templar-gen plugin'
+		}
+	}
 }
