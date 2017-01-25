@@ -13,6 +13,7 @@
 			releases directory.
 		<p>
 
+		<h3>Command line</h3>
 		<p>run it with the following</p>
 
 <pre><code>
@@ -33,6 +34,7 @@ java -jar templar-gen.jar &lt;input_directory&gt; &lt;output_directory&gt;
 java -jar templar-gen.jar src .
 </code></pre>
 
+		<h3>ant (build.xml)</h3>
 		<p>
 			You can of course use it within a ant build file:
 		</p>
@@ -48,6 +50,29 @@ java -jar templar-gen.jar src .
 	&lt;/target&gt;
 &lt;/project&gt;
 pre}
+</code></pre>
+
+		<h3>Gradle (build.gradle)</h3>
+
+		<p>Add the following to your <code>build.gradle</code> file</p>
+<pre><code>
+plugins {{{\n}
+{\t}id 'synapticloop.templar-gen' version '1.2.4'{\n}
+}{\n}
+</code></pre>
+
+		<p>then</p>
+
+<pre><code>
+templarGen {{{\n}
+{\t}out = '.'{\n}
+{\t}inDir = 'src'{\n}
+}{\n}</code></pre>
+
+<p>and to run it</p>
+
+<pre><code>
+gradle templarGen
 </code></pre>
 
 		<h3>Need Help?</h3>
