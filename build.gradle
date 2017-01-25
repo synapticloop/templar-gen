@@ -5,18 +5,23 @@ plugins {
 	id 'maven-publish'
 
 	id 'net.saliman.cobertura' version '2.2.6'
-	id "org.sonarqube" version "1.0"
-	id "com.jfrog.bintray" version "1.4"
-	id 'com.github.johnrengelman.shadow' version '1.2.2'
+	id 'co.riiid.gradle' version '0.3.1'
+	id 'com.jfrog.bintray' version '1.4'
+
+	id 'synapticloop.documentr' version '1.2.3'
+	id 'synapticloop.copyrightr' version '1.0.1'
+	id "synapticloop.projectFilestatistics" version "1.0.1"
+
+	id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 group = 'synapticloop'
 archivesBaseName = 'templar-gen'
 description = """generate output with the Templar templating engine"""
-version = 'v1.0.0'
+version = '1.2.0'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 
 cobertura {
@@ -36,8 +41,9 @@ repositories {
 }
 
 dependencies {
-	runtime 'synapticloop:templar:v1.1.0'
-	compile 'synapticloop:templar:v1.1.0'
+	runtime 'synapticloop:templar:1.3.0'
+
+	compile 'synapticloop:templar:1.3.0'
 }
 
 
@@ -97,4 +103,24 @@ bintray {
 		repo = 'maven'
 		name = "templar-gen"
 	}
+}
+
+copyrightr {
+	dryRun = false
+	excludes = [
+		"src/test/java/**/*.java"
+	]
+}
+
+github {
+	owner = group
+	repo = archivesBaseName
+	if(System.getenv('GITHUB_TOKEN')) {
+		token = System.getenv('GITHUB_TOKEN')
+	}
+	tagName = version
+	name = version
+	assets = [
+		'build/libs/' + archivesBaseName + '-' + version + '.jar'
+	]
 }
