@@ -2,70 +2,42 @@
 <html>
 {import src/imports/head.templar}
 <body>
-<div class="wrapper">
-	{import src/imports/sidenav.templar}
-	<section>
-		<h3><a id="templar-gen" class="anchor" href="#templar-gen" aria-hidden="true"><span class="octicon octicon-link"></span></a>templar-gen</h3>
-		<p>
-			templar-gen was coded in a couple of hours to generate pages just like this 
-			one.  It is a very simple templating language based on the templar templating 
-			language from synapticloop
-		</p>
 
-		<h3>usage</h3>
+{import src/imports/header.templar}
 
-		<p>
-			Get the latest code from <a href="https://github.com/synapticloop/templar-gen/releases">the templar-gen</a> 
-			releases directory.
-		<p>
+<section id="main">
+	<div class="container">
+		<header class="major">
+			<h2>Welcome to templar gen</h2>
+			<p>generate static pages using the templar templating language</p>
+		</header>
 
-		<p>run it with the following</p>
+		<div class="row 200%">
+			<div class="4u 12u$(medium)">
+				{import src/imports/sidebar.templar}
+			</div>
 
-<pre><code>
-java -jar templar-gen.jar &lt;input_directory&gt; &lt;output_directory&gt;
-</code></pre>
+			<div class="8u$ 12u$(medium) important(medium)">
 
-		<p>
-			In order for pages to be generated, you need to have both the file and a 
-			context  file in the directory that is going to be created.  If you have a 
-			look at the source code for this site - you will see the layout.
-		</p>
+				<section id="content">
+					{import src/imports/content/index.html}
+				</section>
 
-		<p>
-			This page was generated with the following command line
-		</p>
+			</div>
+		</div>
+	</div>
+</section>
 
-<pre><code>
-java -jar templar-gen.jar src .
-</code></pre>
-
-		<p>
-			You can of course use it within a ant build file:
-		</p>
-
-<pre><code>
-{pre &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;project name="templar-gen" default="gen"&gt;
-	&lt;target name="gen" description="templar-gen the pages"&gt;
-		&lt;java jar="templar-gen.jar" fork="true" failonerror="true" maxmemory="128m"&gt;
-			&lt;arg value="src" /&gt;
-			&lt;arg value="." /&gt;
-		&lt;/java&gt;
-	&lt;/target&gt;
-&lt;/project&gt;
-pre}
-</code></pre>
-
-		<h3>Need Help?</h3>
-
-		<p>
-			There is copious documentation for the templar templating engine over at 
-			<a href="http://synapticloop.github.io/templar/">http://synapticloop.github.io/templar/</a>
-		</p>
-		{import src/imports/footer.templar}
-	</section>
+<div id="footer">
+	<div class="container">
+		<div class="row 200% uniform">
+		</div>
+	</div>
+	<div class="copyright">
+		&copy; Synapticloop. All rights reserved.
+	</div>
 </div>
-<script src="javascripts/scale.fix.js"></script>
 
+{import src/imports/scripts.templar}
 </body>
 </html>
