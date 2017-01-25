@@ -20,8 +20,9 @@ public class TemplarGenPluginExtension {
 	private String in = "src";
 	private String out = ".";
 
+	public void setIn(String in) { this.in = in; }
 	public String getIn() { return this.in; }
+	public void setOut(String out) { this.out = out; }
 	public String getOut() { return this.out; }
-
 
 }

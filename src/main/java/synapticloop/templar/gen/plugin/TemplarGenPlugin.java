@@ -20,7 +20,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 public class TemplarGenPlugin implements Plugin<Project> {
-	private static final String TEMPLAR_GEN = "templar-gen";
+	private static final String TEMPLAR_GEN = "templarGen";
 
 	@Override
 	public void apply(Project project) {
