@@ -4,3 +4,8 @@
 		{import ../synapticloop.github.io/src/includes/all-projects.html}
 	</nav>
 </div>
+
+<section id="banner">
+	<h2>Welcome to templar gen</h2>
+	<p>generate static pages using the templar templating language</p>
+</section>
