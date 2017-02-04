@@ -47,11 +47,23 @@ public class Generator {
 
 		Path start = FileSystems.getDefault().getPath(inputDir);
 
+		final Properties defaultProperties = new Properties();
+		// now load up the default context
+		File initialTemplarContextFile = new File(start.toAbsolutePath() + "/.context");
+		if(initialTemplarContextFile.exists() && initialTemplarContextFile.canRead() && initialTemplarContextFile.isFile()) {
+			defaultProperties.load(new FileReader(initialTemplarContextFile));
+			SimpleLogger.logInfo("Loaded default context items '" + inputDir + "/.context'");
+		} else {
+			SimpleLogger.logInfo("No default context file found '" + inputDir + "/.context'");
+		}
+
 		Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 				String inputTemplarContextFile = file.toString();
+				String fileName = file.getFileName().toString();
 
-				if (inputTemplarContextFile.endsWith(TEMPLAR_CONTEXT_FILE_EXTENSION)) {
+				if (inputTemplarContextFile.endsWith(TEMPLAR_CONTEXT_FILE_EXTENSION) && 
+						!fileName.equals(TEMPLAR_CONTEXT_FILE_EXTENSION)) {
 					// look for another file without the .context
 					String inputTemplarFileName = inputTemplarContextFile.substring(0, inputTemplarContextFile.indexOf(TEMPLAR_CONTEXT_FILE_EXTENSION));
 					File inputTemplarFile = new File(inputTemplarFileName);
@@ -61,6 +73,7 @@ public class Generator {
 						TemplarContext templarContext = new TemplarContext();
 						Properties properties = new Properties();
 						properties.load(new FileReader(new File(inputTemplarContextFile)));
+						properties.putAll(defaultProperties);
 
 						Enumeration<Object> keys = properties.keys();
 						while (keys.hasMoreElements()) {
@@ -84,7 +97,9 @@ public class Generator {
 
 							fileWriter = new FileWriter(outputFile);
 							fileWriter.write(parser.render(templarContext));
-							SimpleLogger.logInfo("Processing input file '" + inputTemplarFile + "', with context '" + inputTemplarContextFile + "', to " + outputFile);
+							SimpleLogger.logInfo("Processing input file '" + inputTemplarFile);
+							SimpleLogger.logInfo("         with context '" + inputTemplarContextFile);
+							SimpleLogger.logInfo("            output to '" + outputFile);
 							numFilesGenerated++;
 						} catch (ParseException pex) {
 							SimpleLogger.logFatal("Could not parse file '" + inputTemplarFileName + "'.", pex);

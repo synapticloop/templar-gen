@@ -54,6 +54,7 @@ public class Main {
 		if(!file.exists() && !create) {
 			usage("Could not find directory '" + temp + "'.");
 		}
+
 		if(!file.exists() && create) {
 			file.mkdirs();
 		}

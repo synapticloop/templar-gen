@@ -16,10 +16,12 @@ plugins {
 	id "synapticloop.projectFilestatistics" version "1.0.1"
 }
 
+tasks.withType(Javadoc).all { enabled = false }
+
 group = 'synapticloop'
 archivesBaseName = 'templar-gen'
 description = """generate output with the Templar templating engine"""
-version = '1.4.0'
+version = '1.4.1'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
