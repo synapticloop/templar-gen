@@ -1,0 +1,30 @@
+<h3>Gradle</h3>
+
+<p>
+	If you are running a simple gradle project that only requires the templar gen 
+	(for instance if you are building documentation on the <code>gh-pages</code> 
+	branch and this is all that is required.)
+</p>
+
+<h3>simple <code>build.gradle</code></h3>
+
+<pre><code>
+{pre
+plugins {
+	id 'synapticloop.templar-gen' version '1.2.4'
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	jcenter()
+}
+
+templarGen {
+	out = '.'
+	inDir = 'src'
+}
+pre}
+</code></pre>
+
+{import src/imports/footer.templar}
