@@ -1,0 +1,75 @@
+<h3>Importing snippets</h3>
+
+<p>
+	Importing snippets is the main usage for any page rendering system, below is 
+	the file that generates the home page (index.html)
+</p>
+
+<pre><code>
+{pre
+&lt;!doctype html&gt;
+&lt;html&gt;
+{import src/imports/head.templar}
+&lt;body&gt;
+
+{import src/imports/header.templar}
+
+&lt;section id="main"&gt;
+	&lt;div class="container"&gt;
+		&lt;div class="row 200%"&gt;
+			&lt;div class="4u 12u$(medium)"&gt;
+				{import src/imports/sidebar.templar}
+			&lt;/div&gt;
+
+			&lt;div class="8u$ 12u$(medium) important(medium)"&gt;
+
+				&lt;section id="content"&gt;
+					{import src/imports/content/index.html}
+				&lt;/section&gt;
+
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/section&gt;
+
+{static ../synapticloop.github.io/src/includes/footer.html}
+
+{static ../synapticloop.github.io/src/includes/scripts.html}
+&lt;/body&gt;
+&lt;/html&gt;
+pre}
+</code></pre>
+
+<p>
+	Note that there are both <code>import</code> and <code>static</code> 
+	declarations in the file and that the file locations do not always reside in 
+	the project directory.
+</p>
+
+<h4><code>{{import &lt;file_location&gt;}</code></h4>
+
+<blockquote><strong>All locations are relative to the base directory.</strong>  
+I.e. the directory from which the <code>templar-gen</code> is invoked.</blockquote>
+
+<p>
+	This will import the file as designated in the <code>file_location</code>, 
+	which will also parse the files for templar functions and processing 
+	instructions.
+</p>
+
+<p>
+	This means that you are able to output any context items in the file.  If you 
+	are including a file with the templar delimiter (i.e. <code>{{</code>) you will 
+	need to escape it as <code>{{{{</code>.
+</p>
+
+
+<h4><code>{{static &lt;file_location&gt;}</code></h4>
+
+<blockquote><strong>All locations are relative to the base directory.</strong>  
+I.e. the directory from which the <code>templar-gen</code> is invoked.</blockquote>
+
+<p>
+	Should you wish to include the file verbatim - i.e. without any templar parsing 
+	of directives - then the <code>{{static}</code> declaration is what is required.
+</p>

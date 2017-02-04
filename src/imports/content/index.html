@@ -6,6 +6,18 @@
 	templar templating language from synapticloop.
 </p>
 
+<h3>Page cutting</h3>
+
+<p>The generation of pages revolves around determining the common parts of the 
+page, extracting them and including them in multiple files.</p>
+
+<p>The basic commands for including snippets of a page are one of:</p>
+
+<ol>
+	<li><code>{{import filename}</code> when you want to include the file and parse the contents (with templar)</li>
+	<li><code>{{static filename}</code> when you want to include the static contents of the file without parsing the contents</li>
+</ol>
+
 <h3>usage</h3>
 
 <p>
@@ -13,13 +25,19 @@
 	releases directory.
 <p>
 
-<h3>Command line</h3>
+<p><em>(You will want the <code>templar-gen-&lt;version&gt;<strong>-all</strong>.jar</code> jar file)</em></p>
+
+<h4>Command line</h4>
 
 <p>run it with the following</p>
 
 <pre><code>
 java -jar templar-gen.jar &lt;input_directory&gt; &lt;output_directory&gt;
 </code></pre>
+
+<p>You can of course use <a href="/ant.html">Ant</a> or <a href="/gradle.html">Gradle</a></p>
+
+<h4>Which files are generated</h4>
 
 <p>
 	In order for pages to be generated, you need to have both the file and a 
@@ -42,53 +60,9 @@ java -jar templar-gen.jar &lt;input_directory&gt; &lt;output_directory&gt;
 java -jar templar-gen.jar src .
 </code></pre>
 
-<h3>ant (build.xml)</h3>
-<p>
-	You can of course use it within a ant build file:
-</p>
-
-<pre><code>
-{pre &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;project name="templar-gen" default="gen"&gt;
-	&lt;target name="gen" description="templar-gen the pages"&gt;
-		&lt;java jar="templar-gen.jar" fork="true" failonerror="true" maxmemory="128m"&gt;
-			&lt;arg value="src" /&gt;
-			&lt;arg value="." /&gt;
-		&lt;/java&gt;
-	&lt;/target&gt;
-&lt;/project&gt;
-pre}
-</code></pre>
-
-<h3>Gradle (build.gradle)</h3>
-
-<p>Add the following to your <code>build.gradle</code> file</p>
-
-<pre><code>
-plugins {{{\n}
-{\t}id 'synapticloop.templar-gen' version '1.2.4'{\n}
-}{\n}
-</code></pre>
-
-		<p>then</p>
-
-<pre><code>
-templarGen {{{\n}
-{\t}out = '.'{\n}
-{\t}inDir = 'src'{\n}
-}{\n}</code></pre>
-
-<p>and to run it</p>
-
-<pre><code>
-gradle templarGen
-</code></pre>
-
 <h3>Need Help?</h3>
 
 <p>
 	There is copious documentation for the templar templating engine over at 
-	<a href="http://synapticloop.github.io/templar/">http://synapticloop.github.io/templar/</a>
+	<a href="https://synapticloop.github.io/templar/">https://synapticloop.github.io/templar/</a>
 </p>
-
-{import src/imports/footer.templar}

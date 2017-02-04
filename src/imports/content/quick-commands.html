@@ -1,0 +1,53 @@
+<h3>Quick commands</h3>
+
+<p>
+	Below is a brief list of commands which may are used in generating these static 
+	sites.
+</p>
+
+<p>
+	For a complete overview of all of the templar processing instructions, see 
+	<a href="https://synapticloop.github.io/templar/">templar</a> for more 
+	information.
+</p>
+
+<h4>Importing snippets</h4>
+
+<p><code>{{static ...}</code> and <code>{{import ...}</code> - see the section <a href="/importing-snippets.html">importing snippets</a>.</p>
+
+<h4>Using context items</h4>
+
+<p>The context file for this file (<code>quick-commands.html.context</code>) is below:
+
+<pre><code>
+{static src/quick-commands.html.context}
+</code></pre>
+
+<p>
+	To output the value for <code>example</code> from the context use the format 
+	<code>{{example}</code> which will output <code>{example}</code>
+</p>
+
+<p>
+	And similarly for <code>{{text}</code> which outputs <code>{text}</code>
+</p>
+
+<h4>Pre-rendered content</h4>
+
+<p>
+	When you don't want templar to process any directives, wrap the content with 
+	the <code>{{pre   pre}</code> directive
+</p>
+
+<p>
+	For example - the next paragraph is wrapped in 
+</p>
+
+<p>
+{pre 
+	When you use the 'pre' directive, anything within the directives will not be 
+	escaped, so the character '<code>{</code>' can be output without any errors. 
+	(normally you would escape this character thusly: <code>{{</code>).  Also, any 
+	calls to output variables from the context (e.g. <code>{text}</code>) will also be ignored.
+pre}
+</p>

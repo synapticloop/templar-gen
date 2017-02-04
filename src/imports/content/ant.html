@@ -1,0 +1,25 @@
+<h3>Ant</h3>
+
+<p>
+	If you are running an ant build project 
+</p>
+
+<h3>simple <code>build.xml</code></h3>
+
+<pre><code>
+{pre &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="templar-gen" default="gen"&gt;
+	&lt;target name="gen" description="templar-gen the pages"&gt;
+		&lt;java jar="templar-gen.jar" fork="true" failonerror="true" maxmemory="128m"&gt;
+			&lt;arg value="src" /&gt;
+			&lt;arg value="." /&gt;
+		&lt;/java&gt;
+	&lt;/target&gt;
+&lt;/project&gt;
+pre}
+</code></pre>
+<p>
+	You can then simply:
+</p>
+
+<pre><code>ant templar-gen</code></pre>
