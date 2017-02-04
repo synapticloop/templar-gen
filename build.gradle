@@ -17,9 +17,9 @@ plugins {
 }
 
 group = 'synapticloop'
-archivesBaseName = 'templarGen'
+archivesBaseName = 'templar-gen'
 description = """generate output with the Templar templating engine"""
-version = '1.2.4'
+version = '1.4.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -42,9 +42,9 @@ repositories {
 }
 
 dependencies {
-	runtime 'synapticloop:templar:1.3.0'
+	runtime 'synapticloop:templar:1.4.0'
 
-	compile 'synapticloop:templar:1.3.0'
+	compile 'synapticloop:templar:1.4.0'
 	compile gradleApi()
 }
 
@@ -56,13 +56,13 @@ task fatJar(type: Jar) {
 	classifier = 'all'
 
 	from { locateJar('templar') } { include "**" }
+	from { locateJar('json') } { include "**" }
 	from(sourceSets.main.output) { include "**" }
 
 	manifest {
 		attributes("Main-Class": "synapticloop.templar.gen.Main")
 	}
 
-	classifier = ''
 }
 
 jar.finalizedBy(project.tasks.fatJar)
@@ -139,7 +139,8 @@ github {
 	tagName = version
 	name = version
 	assets = [
-		'build/libs/' + archivesBaseName + '-' + version + '.jar'
+		'build/libs/' + archivesBaseName + '-' + version + '.jar',
+		'build/libs/' + archivesBaseName + '-' + version + '-all.jar'
 	]
 }
 
