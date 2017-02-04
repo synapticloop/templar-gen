@@ -16,7 +16,7 @@ plugins {
 	id "synapticloop.projectFilestatistics" version "1.0.1"
 }
 
-tasks.withType(Javadoc).all { enabled = false }
+// tasks.withType(Javadoc).all { enabled = false }
 
 group = 'synapticloop'
 archivesBaseName = 'templar-gen'
