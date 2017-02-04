@@ -1,0 +1,60 @@
+<h3>using the context</h3>
+
+<p>
+	The context comes from two different places:
+</p>
+
+<ol>
+	<li>The default context <code>.context</code> which is available to all of the files</li>
+	<li>The individual context <code>&lt;filename%gt;.context</code> which is only available to the <code>filename</code> file</li>
+</ol>
+
+<h4>The default context</h4>
+
+<p>
+	For all files that are generated,  there is a <code>.context</code> file that 
+	resides in the <code>&lt;input_directory&gt;</code> directory, each of the 
+	properties are placed in every context and made available to all files.  For 
+	this generation, the input file is <code>src/.context</code>.
+</p>
+
+<p>
+	The default context file (<code>src/.context</code>) is below:
+</p>
+
+<pre><code>
+{static src/.context}
+</code></pre>
+
+<p>
+	Which can then be referenced in any file:
+</p>
+
+<ul>
+	<li><code>{{head-title}</code> outputs: <code>{head-title}</code></li>
+	<li><code>{{header-h1}</code> outputs: <code>{header-h1}</code></li>
+	<li><code>{{sidebar-h3}</code> outputs: <code>{sidebar-h3}</code></li>
+	<li><code>{{sidebar-tagline}</code> outputs: <code>{sidebar-tagline}</code></li>
+</ul>
+
+<h4>The individual context</h4>
+
+<p>
+	For each file that is generated, where there is a corresponding <code>.context</code> 
+	file, each of the properties are placed in the context and made available to 
+	that file only.
+</p>
+
+<pre><code>
+{static src/using-the-context.html.context}
+</code></pre>
+
+<p>
+	Which can then be referenced in this file only:
+</p>
+
+<ul>
+	<li><code>{{contextItemOne}</code> outputs: <code>{contextItemOne}</code></li>
+	<li><code>{{contextItemTwo}</code> outputs: <code>{contextItemTwo}</code></li>
+</ul>
+

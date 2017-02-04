@@ -1,6 +1,7 @@
 <ul>
 	<li><a href="index.html">Home</a></li>
 	<li><a href="importing-snippets.html">Importing snippets</a></li>
+	<li><a href="using-the-context.html">Using the context</a></li>
 	<li><a href="quick-commands.html">Quick commands</a></li>
 	<li><a href="gradle.html">Gradle</a></li>
 	<li><a href="ant.html">Ant</a></li>

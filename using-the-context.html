@@ -6,15 +6,22 @@
 		<a href="https://github.com/synapticloop/templar-gen/">synapticloop templar-gen</a>
 	</p>
 </section>
-</section></div><div class="8u$ 12u$(medium) important(medium)"><section id="content"><h3>Ant</h3><p>If you are running an ant build project </p><h3>simple <code>build.xml</code></h3><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;project name="templar-gen" default="gen"&gt;
-	&lt;target name="gen" description="templar-gen the pages"&gt;
-		&lt;java jar="templar-gen.jar" fork="true" failonerror="true" maxmemory="128m"&gt;
-			&lt;arg value="src" /&gt;
-			&lt;arg value="." /&gt;
-		&lt;/java&gt;
-	&lt;/target&gt;
-&lt;/project&gt;</code></pre><p>You can then simply:</p><pre><code>ant templar-gen</code></pre></section></div></div></div></section><div id="footer">
+</section></div><div class="8u$ 12u$(medium) important(medium)"><section id="content"><h3>using the context</h3><p>The context comes from two different places:</p><ol><li>The default context <code>.context</code> which is available to all of the files</li><li>The individual context <code>&lt;filename%gt;.context</code> which is only available to the <code>filename</code> file</li></ol><h4>The default context</h4><p>For all files that are generated,  there is a <code>.context</code> file that resides in the <code>&lt;input_directory&gt;</code> directory, each of the properties are placed in every context and made available to all files.  For this generation, the input file is <code>src/.context</code>.</p><p>The default context file (<code>src/.context</code>) is below:</p><pre><code>head-title=templar gen by synapticloop
+
+header-h1=templar-gen
+header-h2=Welcome to templar gen
+header-tagline=Generate static pages using the templar templating language
+
+sidebar-h3=templar-gen
+sidebar-tagline=Generate static pages using the templar templating language
+
+github-org=synapticloop
+github-repo=templar-gen
+</code></pre><p>Which can then be referenced in any file:</p><ul><li><code>{head-title}</code> outputs: <code>templar gen by synapticloop</code></li><li><code>{header-h1}</code> outputs: <code>templar-gen</code></li><li><code>{sidebar-h3}</code> outputs: <code>templar-gen</code></li><li><code>{sidebar-tagline}</code> outputs: <code>Generate static pages using the templar templating language</code></li></ul><h4>The individual context</h4><p>For each file that is generated, where there is a corresponding <code>.context</code> file, each of the properties are placed in the context and made available to that file only.</p><pre><code>contextItemOne=hello
+
+contextItemTwo=This is an individual context item which is only available to the \
+'using-the-context.html' file
+</code></pre><p>Which can then be referenced in this file only:</p><ul><li><code>{contextItemOne}</code> outputs: <code>hello</code></li><li><code>{contextItemTwo}</code> outputs: <code>This is an individual context item which is only available to the 'using-the-context.html' file</code></li></ul></section></div></div></div></section><div id="footer">
 	<div class="container">
 		<div class="row 200% uniform">
 		</div>
