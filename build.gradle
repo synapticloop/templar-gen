@@ -21,7 +21,7 @@ plugins {
 group = 'synapticloop'
 archivesBaseName = 'templar-gen'
 description = """generate output with the Templar templating engine"""
-version = '1.4.1'
+version = '1.4.2'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -44,9 +44,9 @@ repositories {
 }
 
 dependencies {
-	runtime 'synapticloop:templar:1.4.0'
+	runtime 'synapticloop:templar:1.4.1'
 
-	compile 'synapticloop:templar:1.4.0'
+	compile 'synapticloop:templar:1.4.1'
 	compile gradleApi()
 }
 
