@@ -45,7 +45,9 @@ public class TemplarGenTask extends DefaultTask {
 			extension = new TemplarGenPluginExtension();
 		}
 
-		Generator generator = new Generator(extension.getInDir(), extension.getOut());
+		String absoluteDir = getProject().getProjectDir().getAbsolutePath() + "/";
+		System.out.println(absoluteDir);
+		Generator generator = new Generator(absoluteDir + extension.getInDir(), absoluteDir + extension.getOut());
 		generator.generate();
 	}
 }
